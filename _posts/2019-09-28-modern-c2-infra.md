@@ -2,9 +2,7 @@
 layout: post
 title: Modern C2 Infrastructure with Terraform, DigitalOcean, Covenant and Cloudflare
 subtitle: Part 1
-gh-repo: daattali/beautiful-jekyll
-gh-badge: [star, fork, follow]
-tags: [test]
+tags: [red-teaming]
 comments: true
 ---
 
