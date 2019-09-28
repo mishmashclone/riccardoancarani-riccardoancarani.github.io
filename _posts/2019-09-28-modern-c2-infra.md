@@ -28,7 +28,7 @@ Following the blog post from Cobalt Strike's author Raphael Mudge ( https://blog
 - A CloudFront distribution group for Domain Fronting (not yet!).
 The following diagram summarizes the aforementioned architecture:
 
-![](2019-09-28-modern-c2-infra/4779d7cf4a73fd792fed6bc47ebd810a.png)
+![](/assets/2019-09-28-modern-c2-infra/4779d7cf4a73fd792fed6bc47ebd810a.png)
 
 ## The C2 Servers
 As said previously, we'll use Covenant as a C2 framework.  We can easily define droplets to run Covenant with the following code:
@@ -281,7 +281,7 @@ Let's summarise all the resources we provisioned:
 
 Let's access the Covenant management interfaces and configure the appropriate listeners. I bounded the `ads` redirector to the short haul server and therefore we're going to launch a listener with the following configuration:
 
-![](2019-09-28-modern-c2-infra/ea994ce091092f0782a730d1f39b06bd.png)
+![](/assets/2019-09-28-modern-c2-infra/ea994ce091092f0782a730d1f39b06bd.png)
 
 We're going to do the same for the long haul server, with the `help` redirector.
 
@@ -307,24 +307,24 @@ The 404 response means that we're correctly communicating with the Covenant serv
 
 Let's deploy an implant in a Windows 10 testing machine. We're going to use the MSBuild stager:
 
-![](2019-09-28-modern-c2-infra/f6e02682cd5cdf253775273efd79d1ca.png)
+![](/assets/2019-09-28-modern-c2-infra/f6e02682cd5cdf253775273efd79d1ca.png)
 
 And as we can see, the grunt implant is active:
 
-![](2019-09-28-modern-c2-infra/0e041285e3cae35754d78b42ee746aa5.png)
+![](/assets/2019-09-28-modern-c2-infra/0e041285e3cae35754d78b42ee746aa5.png)
 
 With covenant unfortunately we don't have the `spawn` command as in Cobalt Strike, so in order to pass the session to the other C2 server we have to do it manually.
 
 Let's generate another stager in the long haul server, and execute it from the session we have. We're going to host a powershell script in the long haul server and then IEX it to obtain another session:
 
-![](2019-09-28-modern-c2-infra/7a6dcc6e5e0b6d8daaea8783d7a3928a.png)
+![](/assets/2019-09-28-modern-c2-infra/7a6dcc6e5e0b6d8daaea8783d7a3928a.png)
 
-![](2019-09-28-modern-c2-infra/02885b627c0c7aa0b6c7612691c76ed8.png)
+![](/assets/2019-09-28-modern-c2-infra/02885b627c0c7aa0b6c7612691c76ed8.png)
 
 
 The command `shell powershell` is not the best option opsec-wise, but that's something we're going to discuss in another post. All that matters is that we now have another covenant implant linked to our long haul server!
 
-![](2019-09-28-modern-c2-infra/e2ffe753c298b4c7f0a04de5a1e6fbd1.png)
+![](/assets/2019-09-28-modern-c2-infra/e2ffe753c298b4c7f0a04de5a1e6fbd1.png)
 
 ## What's Left to Do
 
