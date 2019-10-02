@@ -12,8 +12,8 @@ The main activities that I'm involved in are:
 - Web app pentesting
 - [insert other boring stuff consultants have to do]
 
-You can find me on twitter at @dottor_morte or LinkdIn!
+You can find me on twitter at @dottor_morte or LinkedIn!
 
 My GitHub profile kinda sucks because the interesting stuff cannot be released yet
 
-↑ that's what someone who's not able to code would say 
+↑ that's what someone who's not able to code would say
