@@ -1,16 +1,19 @@
 ---
 layout: page
 title: About me
-subtitle: Why you'd want to go on a date with me
+subtitle: Who the hell are you and why you are talking to me
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+My name is Riccardo and I currently work as a security consultant at F-Secure Consulting.
+The main activities that I'm involved in are:
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+- Infrastructure pentesting
+- Active Directory Security assessments
+- Web app pentesting
+- [insert other boring stuff consultants have to do]
 
-What else do you need?
+You can find me on twitter at @dottor_morte or LinkdIn!
 
-### my history
+My GitHub profile kinda sucks because the interesting stuff cannot be released yet
 
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](http://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+↑ that's what someone who's not able to code would say 
