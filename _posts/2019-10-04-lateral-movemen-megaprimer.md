@@ -50,7 +50,7 @@ This phase is preceded by the Privilege Escalation phase, this is very important
 * We are in possess of credential material for one or more users;
 * We (optionally) obtained elevated access to one or more machines by unspecified means.
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/4b49c0f91f7623484f4bb94693ecc1ae.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/4b49c0f91f7623484f4bb94693ecc1ae.png)
 
 > Image taken from: https://www.varonis.com/blog/cyber-kill-chain/
 
@@ -107,14 +107,14 @@ dir \\<TARGET>\C$
 The success of this operation will indicate whether we have administrative access or not.
 An example of a successful directory listing:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/b59ba77f158a8c47e02a6d2d43ca4525.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/b59ba77f158a8c47e02a6d2d43ca4525.png)
 
 Another quick way of determine remote admin access is through WMI using the following cmdlet:
 
 ```
 powershell.exe Get-WMIObject -Class win32_operatingsystem -Computername TARGET
 ```
-![](assets/2019-10-04-lateral-movemen-megaprimer/2af39a2f34ebc894786795c053e62e97.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/2af39a2f34ebc894786795c053e62e97.png)
 
 It can become tedious to repeat the aforementioned process for every machine within the domain (and will also generate a considerable amount of noise). It is possible to automate this process using PowerView's cmdlet `Find-LocalAdminAccess` that will simply output the machines within the current domain (unsless you specify another domain as a target) where the current user have admin privileges.
 
@@ -128,7 +128,7 @@ For `Remote Management Users`, what we can do is simply use the `Invoke-Command`
 Invoke-Command -Computername TARGET -ScriptBlock {whoami}
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/96ce3fc13ef5204ae6134b98ce414ea8.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/96ce3fc13ef5204ae6134b98ce414ea8.png)
 
 Note that also members of the Administrator groups will be able to execute commands with the aforementioned command.
 
@@ -149,7 +149,7 @@ It is possible to use multiple tools to analyse GPOs and find local group member
 
 With `PowerView` it is possible to use the `Get-NetGPOGroup` cmdlet to obtain all the GPOs that are configuring a local group:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/4db2b5da1f56581cd9a40f201e6be656.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/4db2b5da1f56581cd9a40f201e6be656.png)
 
 Are we part of any of these groups? `whoami /groups` will tell.
 
@@ -179,17 +179,17 @@ Easiest way of enumerating file shares on a remote system is by using the follow
 net view TARGET
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/3f0054565e3eec18a78e06fc4e1c8e1f.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/3f0054565e3eec18a78e06fc4e1c8e1f.png)
 
 In order to verify our ability to read from a remote share, we can use the `dir` command as shown below:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/d39c0fd86b5fc304f3e0ee26e3c73bfe.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/d39c0fd86b5fc304f3e0ee26e3c73bfe.png)
 
 As you can imagine, repeating this process for every domain machine can quickly become infeasible for medium-sized companies with more than 1000 machines.
 
 PowerView's `Invoke-ShareFinder` will automate the process and try to list all the shares within the domain. The `-CheckAccess` flag can also be used to determine where the current user can read or write.
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/ccdb1517d316d0deb2a3b50bac887ac4.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/ccdb1517d316d0deb2a3b50bac887ac4.png)
 
 After identifying all the interesting shares, it would be then possible to search for sensitive data within them. PowerView will also help here with the cmdlet `Find-InterestingFile`.
 
@@ -207,17 +207,17 @@ Access to those objects is regulated by Access Control Lists or ACLs. An ACL is 
 
 For example, is user A can force the reset of the password for user B, within the ACL of user B we will find something like this:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/9fe4f5968d7dfb919c025e4dfc762748.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/9fe4f5968d7dfb919c025e4dfc762748.png)
 
 Why ACLs matter for lateral movement? Because if we compromise a user that has some kind of control over other AD principals via misconfigured ACL, then we would be able to move laterally and compromise the affected object as well.
 
-The objective of this post is not to go very deep into ACL abuse, the recommended reading is [An ACE Up The Sleeve - SpectreOps](https://www.specterops.io/assets/2019-10-04-lateral-movemen-megaprimer/resources/an_ace_up_the_sleeve.pdf) (note that some cases for computer object takeover are not in the whitepaper as they were disovered after the publication of the document).
+The objective of this post is not to go very deep into ACL abuse, the recommended reading is [An ACE Up The Sleeve - SpectreOps](https://www.specterops.io//assets/2019-10-04-lateral-movemen-megaprimer/resources/an_ace_up_the_sleeve.pdf) (note that some cases for computer object takeover are not in the whitepaper as they were disovered after the publication of the document).
 
 The takeaway here is: collect ACLs and determine whether your user has control over another AD object.
 
 BloodHound is the de-facto standard for this task. An example of the previously mentioned relationship is the following (using the neo4j browser):
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/3efa0ac1027ddb1719725e75c7c2633f.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/3efa0ac1027ddb1719725e75c7c2633f.png)
 
 
 ### MSSQL Access
@@ -314,14 +314,14 @@ MATCH p=()-[:MemberOf*0..]->(g:Group)-[r:CanRDP]->() RETURN p
 
 If visualised using neo4j browser, it will appear something like the following:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/56f6feb1d24b2b15d8fe8a574729152e.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/56f6feb1d24b2b15d8fe8a574729152e.png)
 
 Obviously the query should be tuned to include only the users that we actually compromised:
 
 ```
 MATCH p=({owned: true})-[r:CanRDP]->() RETURN p
 ```
-![](assets/2019-10-04-lateral-movemen-megaprimer/77574cdc75793e0fae95097444edef6c.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/77574cdc75793e0fae95097444edef6c.png)
 
 
 ## PowerShell Remoting
@@ -343,7 +343,7 @@ A block of commands can be executed in a similar fashion with `Invoke-Command`:
 Invoke-Command -Computername TARGET -ScriptBlock {whoami /priv}
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/053a49b7bccceddc28a516a8c14c8241.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/053a49b7bccceddc28a516a8c14c8241.png)
 
 
 ## Task Scheduler
@@ -391,7 +391,7 @@ To launch an interactive cmd prompt using PsExec it is possible to use the follo
 psexec.exe -accepteula \\TARGET cmd.exe
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/86b3ceb1e0b10a31bdb4832124e5e6cd.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/86b3ceb1e0b10a31bdb4832124e5e6cd.png)
 
 
 ## DCOM
@@ -440,7 +440,7 @@ A handy PowerShell script that can be used to automate the aforementioned proces
 
 In the figure below it is possible to see a successful password spray attack using the password `1Qazxsw2..`, which is a common keyboard run:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/a1607fda0b9960962e53776655e1c47d.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/a1607fda0b9960962e53776655e1c47d.png)
 
 It is necessary to pay attention to the domain account password lockout threshold in order to avoid locking out accounts and causing disruptions (thing that of course I did in the past).
 
@@ -481,7 +481,7 @@ From an elevated context (I used PsExec locally in this case), run the following
 query user
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/d5a249a5510f41227ca096cc9cad437a.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/d5a249a5510f41227ca096cc9cad437a.png)
 
 The session with ID 1 is the one we're starting from and we want to access the session with ID 2.
 
@@ -499,7 +499,7 @@ Let's break down the commands we used:
 
 After executing the aforementioned commands, we successfully took control over the target session:
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/1b7715bcd0adfeaf5f42f8f8c82fc7cd.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/1b7715bcd0adfeaf5f42f8f8c82fc7cd.png)
 
 It must be noted that this technique has very specific use cases, in fact even without the RDP hijacking technique it would be still possible to dump the credentials of the target user, impersonate them and access the resources we're interested in. RDP Hijacking is a useful technique in situations where the target user is doing some kind of sensitive activity.
  An example of such activity can be accessing a restricted application protected by 2FA.
@@ -622,7 +622,7 @@ In order to perform an overpass-the-hash attack, it is possible to use `Rubeus`:
 ```
 Rubeus.exe asktgt /user:HACKER\rancarani /rc4:NTLM_HASH /ptt
 ```
-![](assets/2019-10-04-lateral-movemen-megaprimer/d17bf8ed7037e33cef137e6b42d84660.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/d17bf8ed7037e33cef137e6b42d84660.png)
 
 
 The command will ask the current domain controller for a user's TGT using the supplied credentials. To verify that the ticket was correctly obtained and loaded into memory (does not require local admin, while PtH with Mimikatz did):
@@ -631,7 +631,7 @@ The command will ask the current domain controller for a user's TGT using the su
 klist
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/e6a4cdde7f7570f3e6e3ce538b08090e.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/e6a4cdde7f7570f3e6e3ce538b08090e.png)
 
 
 ## Pass-the-Ticket
@@ -646,7 +646,7 @@ For example, using `Rubeus` it is possible to dump all the kerberos TGT tickets 
 Rubeus.exe dump /service:krbtgt
 ```
 
-![](assets/2019-10-04-lateral-movemen-megaprimer/35190c8316f827d394507a8022ef7ceb.png)
+![](/assets/2019-10-04-lateral-movemen-megaprimer/35190c8316f827d394507a8022ef7ceb.png)
 
 The base64 blob shown in the previous image is an usable ticket that can be used with the following command:
 
