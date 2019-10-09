@@ -395,6 +395,7 @@ psexec.exe -accepteula \\TARGET cmd.exe
 
 
 ## DCOM
+
 Requires Admin | Local Group Membership | ATTACK ID
 --- | --- | ---
 No | `Remote COM Users`,`Administrators` | T1175
