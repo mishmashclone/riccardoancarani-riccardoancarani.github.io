@@ -571,11 +571,11 @@ References:
 
 * [Pass the hash - reusing hashes](https://sushant747.gitbooks.io/total-oscp-guide/pass_the_hash_-_reusing_hashes.html)
 
-### User Access Control & User Right Assignment
+### User Account Control & User Right Assignment
 
 Let's say you tried a Pth attack, it doesn't work and you're sure that the credentials are the same. How it can be? is PtH broken?
 
-Maybe reading some remedial actions for PtH you encountered some setting like `LocalAccountTokenFilterPolicy`. That option is part of a group of settings called User Access Control (UAC) and they define the amount of privileges and the [integrity level](https://docs.microsoft.com/en-us/windows/win32/secauthz/mandatory-integrity-control) of processes spawned by a user that logged in remotely.
+Maybe reading some remedial actions for PtH you encountered some setting like `LocalAccountTokenFilterPolicy`. That option is part of a group of settings called User Account Control (UAC) and they define the amount of privileges and the [integrity level](https://docs.microsoft.com/en-us/windows/win32/secauthz/mandatory-integrity-control) of processes spawned by a user that logged in remotely.
 
 In simple words, integrity levels are an additional access control restriction that prevents processes with a lower integrity level to interact with processes with an high integrity level. A common example is the `lsass.exe` process that is running with an high integrity level, if you don't elevate the access you have, even with an administrator account (the UAC prompt ;) ), you won't be able to dump its memory.
 
