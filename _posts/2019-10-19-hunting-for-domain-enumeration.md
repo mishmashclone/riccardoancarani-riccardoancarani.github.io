@@ -81,7 +81,7 @@ rule SPNScanning {
 ```
 
 ### Kerberos Pre-authentication Disabled
-Kerberos pre-auth is a UAC option that, if disabled, would allow adversaries to perform ASREP-Roasting attacks. The following Yara rule will identify attempts to enumerate those users:
+Kerberos pre-auth is a UAC option that, if disabled, would allow adversaries to perform ASREP-Roasting attacks. The following Yara rule will identify attempts to enumerate users with Kerberos pre-auth disabled:
 
 ```
 rule ASREPRoasting {
