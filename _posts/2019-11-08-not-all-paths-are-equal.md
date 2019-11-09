@@ -14,7 +14,7 @@ For those who've been living in a cave for the past couple of years, in a nutshe
 
 An example of the relationships created using BloodHound:
 
-![](2019-11-08-not-all-paths-are-equal/f3740095f733494292da49ce6beadf60.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/f3740095f733494292da49ce6beadf60.png)
 
 This article is mainly based on some research that I've been doing recently on attack paths and graph theory (although this specific article will not be focused on graph theory).
 
@@ -26,12 +26,12 @@ Let's make a couple of **examples** and **edge cases** to clarify the concept:
 
 * Let's suppose that User A is effectively part of the Domain Admins group, not directly but through several nested group memberships, let's make it 5 for the sake of this example. In this case the distance of User A to Domain Admins is 6.
 
-![](2019-11-08-not-all-paths-are-equal/25df297e21fac9fa64a96f090c826b42.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/25df297e21fac9fa64a96f090c826b42.png)
 
 
 * User B, is not part of the Domain Admin groups, but for some reason he's able to RDP into the Domain Controller where a Domain Admin is logged on. In this case the distance to Domain Admins is 3.
 
-![](2019-11-08-not-all-paths-are-equal/e5a92ebf3160c8817b7205dd4a24b80b.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/e5a92ebf3160c8817b7205dd4a24b80b.png)
 
 
 But let's think about it for a second, what's easier to exploit? If we follow the "shortest path" algorithm, clearly User B is closer. However, if you've ever done an AD assessment in the real live you'll quickly realise that:
@@ -69,7 +69,7 @@ Now, neo4j does not support weighted connections out of the box. Luckily for us,
 
 Since I'm cool and I have a MacBook, I always use the Desktop version of Neo4j. It's quite easy to install the aforementioned plugin:
 
-![](2019-11-08-not-all-paths-are-equal/4836377f718f94a1afa0f2b9def33cc3.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/4836377f718f94a1afa0f2b9def33cc3.png)
 
 
 Let's now set the costs accordingly to our table (in this example just from easiness to exploit, not opsec):
@@ -109,17 +109,17 @@ Let's briefly explain what the query does:
 
 An example of output is shown below:
 
-![](2019-11-08-not-all-paths-are-equal/63503a46e30df407bc53f8c35cc43fd1.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/63503a46e30df407bc53f8c35cc43fd1.png)
 
 In the figure, it is possible to see all the steps and their relative cost, note that the output may contain different paths with the same cost!
 
 If we repeat the same cypher query but from User A and User B that we introduced in the example, we'll see that the path from User B is much more expensive, although it requires less steps.
 
 For User A:
-![](2019-11-08-not-all-paths-are-equal/b89cf4cbe75ddf572ea8c266392d160e.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/b89cf4cbe75ddf572ea8c266392d160e.png)
 
 and for User B:
-![](2019-11-08-not-all-paths-are-equal/48b5372a29a3b05e8a09bc0d51d1b98f.png)
+![](/assets/2019-11-08-not-all-paths-are-equal/48b5372a29a3b05e8a09bc0d51d1b98f.png)
 
 
 
