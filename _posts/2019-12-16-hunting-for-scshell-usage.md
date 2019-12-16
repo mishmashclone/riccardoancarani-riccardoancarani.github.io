@@ -38,6 +38,7 @@ At an high level, the flow of the technique is the following:
 * Restores the previous configuration.
 
 ## Lab Setup
+
 The lab I used to practice with these detections is fairly simple:
 * Windows Server 2012 as a target host;
 * My macOS as attacking machine (RAM ain't free mannn)
