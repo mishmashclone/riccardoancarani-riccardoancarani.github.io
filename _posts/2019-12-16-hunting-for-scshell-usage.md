@@ -96,6 +96,28 @@ Inspecting the query's output we can see that the registry key value associated 
 
 Additionally, SCShell by default uses the `XblAuthManager` service as a target, it would be possible to filter only for that service if the proposed query generates too much false positives.
 
+As an addition, this is the [sigma](https://github.com/Neo23x0/sigma) rule to detect this attack:
+
+```
+title: SCShell Detection
+description: Detects SCShell usage by monitoring for event id 4657 (A registry value was modified)
+reference: https://riccardoancarani.github.io/2019-12-16-hunting-for-scshell-usage/
+author: Riccardo Ancarani
+logsource:
+  product: windows
+detection:
+   selection:
+      EventID: 4657
+      ProcessName: 'C:\Windows\System32\services.exe'
+   keywords:
+      - 'cmd.exe /c'
+      - 'MACHINE\SYSTEM'
+   condition: selection and all of keywords
+falsepositives:
+   - Using services that contain cmd.exe as a binpath
+level: high
+```
+
 ## Caveats
 
 As every detection, it's not perfect and catches only the default behaviour of the tool. In fact it would be possible to execute different commands instead of `cmd.exe` like `powershell.exe`, any other LOLBin used for code execution (`msbuild` etc..) or a webdav path that points to an executable. It would be then necessary to modify the query accordingly (not a very difficult task, left to the reader because of laziness)
