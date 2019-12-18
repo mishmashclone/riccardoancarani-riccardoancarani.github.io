@@ -85,7 +85,7 @@ Let's perform the technique from out attacking machine:
 From out Kibana dashboard we can perform the following query:
 
 ```
-winlog.event_id: "4657"  AND cmd.exe
+(winlog.event_id:"4657" AND winlog.event_data.ProcessName:"C\:\\Windows\\System32\\services.exe" AND "cmd.exe\ \/c" AND "MACHINE\\SYSTEM")
 ```
 
 adn as it is possible to see, we obtained some useful results:
