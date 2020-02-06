@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Extending BloodHound
-subtitle: Part 1: GPOs and User Right Assignment
+subtitle: Part 1 - GPOs and User Right Assignment
 tags: [red-team]
 comments: true
 ---
@@ -33,19 +33,19 @@ Get-DomainPolicyData -Policy all -Server dc01.hacker.lab -Domain hacker.lab
  -Credential $cred
 ```
 
-![](2020-02-6-extending-bloodhound-pt1/dec3ef9720bfb1aa5a4d64adf0b00f99.png)
+![](/assets/2020-02-6-extending-bloodhound-pt1/dec3ef9720bfb1aa5a4d64adf0b00f99.png)
 
 PowerShell gives you the ability of exporting an object into an XML file that can be re-imported later or parsed by other tools. Just append `| Export-CliXML gpo.xml` at the end of the previous command.
 
 What we did was building a parser for that XML object that can also interface with BloodHound via the neo4j driver and augment the dataset with some useful information. More specifically, for each GPO that was configuring a dangerous setting (more on this later) we gathered all the users and computers that were affected by that GPO and modified their objects or added new relationships.
 
 For example, as we already said, within GPOs it is possible to assign special privileges to security principals. This is also known as User Right Assignment (URA):
-![](2020-02-6-extending-bloodhound-pt1/92c7b7505454d61c59547d036597e20e.png)
+![](/assets/2020-02-6-extending-bloodhound-pt1/92c7b7505454d61c59547d036597e20e.png)
 URA can have different purposes and can be effectively used to limit lateral movement opportunities. However, it is also possible that a misconfiguration within the privilege assignment will open new avenues for privilege escalation. Andrea Pierini's research[^3] on this topic is outstanding and definitely recommended.
 
 Combining the information that we gathered from PowerView on privilege assignment to specific SIDs and a list of dangerous privileges that can be abused to perform privilege escalation, we could easily create new relationships within BloodHound that indicates the ability to escalate to SYSTEM:
 
-![](2020-02-6-extending-bloodhound-pt1/96e7cb123a2dff500a42cf8e1503ed8a.png)
+![](/assets/2020-02-6-extending-bloodhound-pt1/96e7cb123a2dff500a42cf8e1503ed8a.png)
 
 Within the exported XML, information about privilege assignment is shown as below:
 
@@ -79,12 +79,12 @@ What the cypher query does, is basically take the GUID of the target GPO, search
 
 This would allow us to hunt for machines where we can RDP into and then privesc via URA:
 
-![](2020-02-6-extending-bloodhound-pt1/6deecf0baba3c048c39702fb71fec655.png)
+![](/assets/2020-02-6-extending-bloodhound-pt1/6deecf0baba3c048c39702fb71fec655.png)
 
 
 The current privileges that the script checks for are the following:
 
-![](2020-02-6-extending-bloodhound-pt1/ed7d67d9ceccb557fb14c96d3af445d4.png)
+![](/assets/2020-02-6-extending-bloodhound-pt1/ed7d67d9ceccb557fb14c96d3af445d4.png)
 
 It must be noted that `SeEnableDelegationPrivilege` does not technically allow a local privesc, but if misconfigured could lead to the complete domain compromise[^4]. I'll fix that as soon as I have some time.
 
@@ -149,7 +149,7 @@ NOTE: The output includes some misconfigurations of remote access policies and U
 
 NOTE: The source is not public yet! I need to polish it a little bit before showing the world how bad I am with Go.
 
- 
+
 Installation is quite simple:
 
 ```
