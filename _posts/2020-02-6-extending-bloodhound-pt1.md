@@ -40,7 +40,9 @@ PowerShell gives you the ability of exporting an object into an XML file that ca
 What we did was building a parser for that XML object that can also interface with BloodHound via the neo4j driver and augment the dataset with some useful information. More specifically, for each GPO that was configuring a dangerous setting (more on this later) we gathered all the users and computers that were affected by that GPO and modified their objects or added new relationships.
 
 For example, as we already said, within GPOs it is possible to assign special privileges to security principals. This is also known as User Right Assignment (URA):
+
 ![](/assets/2020-02-6-extending-bloodhound-pt1/92c7b7505454d61c59547d036597e20e.png)
+
 URA can have different purposes and can be effectively used to limit lateral movement opportunities. However, it is also possible that a misconfiguration within the privilege assignment will open new avenues for privilege escalation. Andrea Pierini's research[^3] on this topic is outstanding and definitely recommended.
 
 Combining the information that we gathered from PowerView on privilege assignment to specific SIDs and a list of dangerous privileges that can be abused to perform privilege escalation, we could easily create new relationships within BloodHound that indicates the ability to escalate to SYSTEM:
