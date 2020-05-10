@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Hunting for Impacket
-subtitle: Bring Your Own Tool
 tags: [threat-hunting]
 comments: true
 ---
