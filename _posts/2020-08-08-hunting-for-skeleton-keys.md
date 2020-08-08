@@ -40,11 +40,11 @@ misc::skeleton
 
 If everything went fine, you should see something like this:
 
-![](2020-08-08-hunting-for-skeleton-keys/8fb7de80ccc85785db3f0cdb4f172f02.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/8fb7de80ccc85785db3f0cdb4f172f02.png)
 
 Mimikatz's default behaviour will introduce the `mimikatz` skeleton key password that can be used to impersonate anyone within the compromised domain.
 
-![](2020-08-08-hunting-for-skeleton-keys/681a1268e9244ccf4e3663727505db1a.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/681a1268e9244ccf4e3663727505db1a.png)
 
 
 ## Detection
@@ -58,11 +58,11 @@ This is something extremely relevant! In a few words it means that if we have th
 
 The screenshot below shows the traffic capture of the Kerberos authentication of a normal account. On the left you can see that a Domain Controller without the implant supports stronger ciphers, whilst on the right the same account that authenticates to a compromised DC supports only RC4:
 
-![](2020-08-08-hunting-for-skeleton-keys/61bfc00b144ac0af2b063bdc6be4e973.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/61bfc00b144ac0af2b063bdc6be4e973.png)
 
 Ok so what can you do about it? Well, a strategy could be to have "canary" accounts that support AES encryption:
 
-![](2020-08-08-hunting-for-skeleton-keys/7e02916ab6ede51f31c553817a3875ae.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/7e02916ab6ede51f31c553817a3875ae.png)
 
 
 You could then periodically poll them in order to evaluate whether the DC is compromised or not.
@@ -74,13 +74,13 @@ Rubeus asktgt /user:saruman /password:password1 /dc:IP /domain:isengard.local /e
 
 So basically what we are doing here is trying to request a Kerberos ticket (`asktgt`) on behalf of the `saruman` user (`/user:saruman`) but only using `AES-256`. In a normal scenario we would obtain something like this:
 
-![](2020-08-08-hunting-for-skeleton-keys/4faec4f963ced1703d1947dc1351d6d5.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/4faec4f963ced1703d1947dc1351d6d5.png)
 
 The base64 value in the output shows that a ticket was successfully obtained.
 
 Repeating the same process but against a compromised DC:
 
-![](2020-08-08-hunting-for-skeleton-keys/6badaecf7d92cc166c5e8b5a023fc99e.png)
+![](/assets/2020-08-08-hunting-for-skeleton-keys/6badaecf7d92cc166c5e8b5a023fc99e.png)
 
 We obtain the `KDC_ERR_ETYPE_NOTSUPP` error, meaning that no tickets were retrieved using that encryption level. And this is a good indicator for Skeleton Key, since we configured the account for AES encryption ourself!
 
@@ -89,6 +89,7 @@ We obtain the `KDC_ERR_ETYPE_NOTSUPP` error, meaning that no tickets were retrie
 * Whilst not technically a detection, you can configure lsass to run as a protected process (PPL). Simple malware won't be able to interact or modify it making the attack unfeasible. However, should a malware be able to load code on the kernel, the PPL protection would be useless (and this is becoming more and more common, even with open source tools, see Mimikatz driver)
 
 * You should have an EDR able to spot and block injection attempts agains LSASS. However, EDR bypass is becoming more and more democratised. Techniques such as direct syscalls are able to evade any userland API hook placed by security products and the attack observed by CyCraft, in fact, was using them.
+
 
 ## References
 
