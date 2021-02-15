@@ -186,7 +186,7 @@ It must be noted that the process `ngentask.exe` will have a short life and ther
 
 Additionally, the DLL I chose for this hijack might not work on every OS. As a matter of fact, the same attack did not work in another Windows 10 system 18363. In order to make the attack work in the other system I targeted the `mscoree.dll` and that worked just fine.
 
-![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement//assets/2021-02-15-20-14-02.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/2021-02-15-20-14-02.png)
 
 
 ## Detection
