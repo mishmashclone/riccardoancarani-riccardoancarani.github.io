@@ -93,7 +93,7 @@ r
 At 12:56 PM every day
 ```
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/1110ce39827c31479a772275a48d5b66.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/1110ce39827c31479a772275a48d5b66.png)
 
 From an opsec perspective, this implies that you need to drop an executable into the remote host. This might not be appropriate for every operation (it certainly was for UNC2452, lol). However, one advantage is that the scheduled task will not be modified and therefore the event IDs we will discuss later will not be generated.
 
@@ -125,7 +125,7 @@ At 12:56 PM every day
 
 In case we want a fancy notepad instead of the old-school calc:
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/ed3e33a56cc103750e7a8afe3514d827.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/ed3e33a56cc103750e7a8afe3514d827.png)
 
 The advantage of this technique is that we do not need to drop EXEs on the remote host, but we can rely on other LOLbins to achieve stealthier code execution.
 
@@ -138,7 +138,7 @@ The idea here is to identify an executable associated with a COM server that is 
 
 In the example here, we see the `NGenTaskLauncher` class that is associated with the `ngentask.exe` binary:
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/0e45cdd9eb899cd6db11b7c23f13a755.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/0e45cdd9eb899cd6db11b7c23f13a755.png)
 
 
 If we try to instantiate it using powershell:
@@ -149,7 +149,7 @@ If we try to instantiate it using powershell:
 
 We get the following missing DLLs with procmon:
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/a11c542e64687661e7b31df0ce75106c.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/a11c542e64687661e7b31df0ce75106c.png)
 
 As it is possible to see, `bcrypt.dll` is not in the application's directory.
 
@@ -180,13 +180,13 @@ If we do place a malicious DLL in the appropriate directory (missing DLLs can ch
 
 As a demo, I placed a dummy `bcrypt.dll` file within `C:\Windows\Microsoft.NET\Framework64\v4.0.30319\` that simply spawned notepad:
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/9937dc0c4b849995ac436faf92778a4f.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/9937dc0c4b849995ac436faf92778a4f.png)
 
 It must be noted that the process `ngentask.exe` will have a short life and therefore to obtain a stable C2 channel you will need to inject your code into another proces.
 
 Additionally, the DLL I chose for this hijack might not work on every OS. As a matter of fact, the same attack did not work in another Windows 10 system 18363. In order to make the attack work in the other system I targeted the `mscoree.dll` and that worked just fine.
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/2021-02-15-20-14-02.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement//assets/2021-02-15-20-14-02.png)
 
 
 ## Detection
@@ -199,7 +199,7 @@ From an evasion perspective, we want to blend in as much as possible with what's
 
 The first step is always baselining. Using the `TaskShell` program this can be done as follows:
 
-![](2021-01-25-random-notes-on-task-scheduler-lateral-movement/f41584e175c07b7ef3927003aa0c89f6.png)
+![](/assets/2021-01-25-random-notes-on-task-scheduler-lateral-movement/f41584e175c07b7ef3927003aa0c89f6.png)
 
 As we can see, we have a lot of possible candidates for rundll targets. I would recommend operators to pick a DLL that is already being used and export the same function that is called by the scheduled task, not necessary but a nice thing to have.
 
