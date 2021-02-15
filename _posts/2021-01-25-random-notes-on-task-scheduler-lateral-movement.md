@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Random Notes on Task Scheduler Lateral Movement
-subtitle: Putting some sunscreen 
+subtitle: Putting some sunscreen
 tags: [red-teaming]
 comments: true
 ---
@@ -12,7 +12,6 @@ comments: true
    - [File Replacement](#file-replacement)   
    - [Task Replacement](#task-replacement)   
    - [COM Handlers](#com-handlers)   
-   - [More COM?](#more-com)   
    - [Detection](#detection)   
    - [Evasion](#evasion)   
 - [References](#references)   
